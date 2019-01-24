@@ -19,7 +19,7 @@ def start(args):
     client = get_client(args.session_name)
     session = os.path.join(args.sessions_directory, args.session_name)
     if not os.path.exists(client.clam_session):
-        print('Error: can not start session. use \'clam login --help\'')
+        print('Error: can not start session. use \'clam login\'')
         sys.exit()
     if not os.path.exists(args.sessions_directory):
         os.mkdir(args.sessions_directory)

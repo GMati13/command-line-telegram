@@ -71,7 +71,7 @@ def get_list(args):
 
 def check_session(session, session_name):
     if not os.path.exists(session):
-        print('Error: session {s} are not started'.format(
+        print('Error: session {s} are not started. use \'clam start\''.format(
             s=session_name
         ))
         sys.exit()
@@ -79,5 +79,5 @@ def check_session(session, session_name):
 def check_login(session_name):
     client = get_client(session_name)
     if not os.path.exists(client.clam_session):
-        print('Warning: you are not logged')
+        print('Warning: you are not logged. use \'clam login\'')
         sys.exit()
