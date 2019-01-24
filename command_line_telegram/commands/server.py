@@ -28,7 +28,7 @@ def start(args):
             s=args.session_name
         ))
         sys.exit()
-    os.system('setsid python3.7 {s} {session} > /tmp/null 2> {errlog} &'.format(
+    os.system('setsid python3.7 {s} {session} > /tmp/null 2>> {errlog} &'.format(
         s=__server,
         session=session,
         errlog=os.path.join(os.path.dirname(client.clam_session), args.session_name + '.log')
