@@ -40,6 +40,6 @@ def kill(args):
     if os.path.exists(session):
         client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         client.connect(session)
-        client.send({
+        client.send(str({
             'action': 'kill'
-        })
+        }).encode('utf-8'))
