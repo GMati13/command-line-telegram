@@ -1,7 +1,7 @@
 import json
 import socket
 import os
-from client import get_client
+from command_line_telegram.client import get_client
 import sys
 
 actions = ['login', 'send', 'list']
@@ -53,13 +53,21 @@ def get_list(args):
         'username': args.username,
         'type': args.type,
         'id': args.id,
-        'minimal': args.minimal
+        'minimal': args.minimal,
+        'history': args.history
     }).encode('utf-8'))
-    dialogs = eval(client.recv(1048576).decode('utf-8'))
-    for dialog in dialogs['dialogs'][::-1]:
-        print(dialog)
-    if args.total_count:
-        print('total:', dialogs['total'])
+    if args.dialogs:
+        dialogs = eval(client.recv(1048576).decode('utf-8'))
+        for dialog in dialogs['dialogs'][::-1]:
+            print(dialog)
+        if args.total_count:
+            print('total:', dialogs['total'])
+    if args.history:
+        history = eval(client.recv(1048576).decode('utf-8'))
+        for message in history['messages'][::-1]:
+            print(message)
+        if args.total_count:
+            print('total:', history['total'])
 
 def check_session(session, session_name):
     if not os.path.exists(session):

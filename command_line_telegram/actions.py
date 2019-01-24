@@ -24,6 +24,12 @@ def get_list(client, data, conn):
             'total': dialogs['total_count'],
             'dialogs': list(map(parse_dialog(data), dialogs['dialogs'][data['offset']:]))
         }).encode('utf-8'))
+    if data['history']:
+        history = client.get_history(data['history'], limit=data['limit'], offset=data['offset'])
+        conn.sendall(str({
+            'total': history['total_count'],
+            'messages': list(map(parse_message(data), history['messages'][data['offset']:]))
+        }).encode('utf-8'))
 
 def parse_dialog(data):
     def parser(dialog):
@@ -43,6 +49,37 @@ def parse_dialog(data):
             return name
         if dialog['top_message']['text']:
             text = dialog['top_message']['text']
+            if data['short']:
+                _t = text.replace('\n', '↲')
+                text = _t[:100]
+                if len(_t) > 100:
+                    text += '...'
+        else:
+            text = '[ unsupported message type ]'
+        return '{n}:\n\t{t}'.format(
+            n=name,
+            t=text
+        )
+    return parser
+
+def parse_message(data):
+    def parser(message):
+        if message['chat']['type'] == 'private':
+            name = message['from_user']['first_name']
+            if message['from_user']['last_name']:
+                name += ' ' + message['from_user']['last_name']
+        else:
+            name = message['from_user']['title']
+        if data['type']:
+            name += ' ({t})'.format(t=message['chat']['type'])
+        if data['username'] and message['from_user']['username']:
+            name += ' [@{t}]'.format(t=message['from_user']['username'])
+        if data['id']:
+            name += ' uid({uid})'.format(uid=message['from_user']['id'])
+        if data['minimal']:
+            return name
+        if message['text']:
+            text = message['text']
             if data['short']:
                 _t = text.replace('\n', '↲')
                 text = _t[:100]

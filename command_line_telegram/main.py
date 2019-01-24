@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.7
 
 from argparse import ArgumentParser
-from do_command import do_command
+from command_line_telegram.do_command import do_command
 
 top_parser = ArgumentParser(prog='clam')
 top_subparsers = top_parser.add_subparsers(title='actions', dest='action', required=True)
@@ -22,6 +22,7 @@ kill_parser = top_subparsers.add_parser('kill')
 
 list_parser = top_subparsers.add_parser('list')
 list_parser.add_argument('-d', '--dialogs', action='store_true')
+list_parser.add_argument('-H', '--history', type=int)
 list_parser.add_argument('-s', '--short', action='store_true')
 list_parser.add_argument('-c', '--total-count', action='store_true')
 list_parser.add_argument('-l', '--limit', type=int, default=15)
@@ -31,4 +32,5 @@ list_parser.add_argument('-t', '--type', action='store_true')
 list_parser.add_argument('--id', action='store_true')
 list_parser.add_argument('-m', '--minimal', action='store_true')
 
-do_command(top_parser.parse_args())
+def main():
+    do_command(top_parser.parse_args())

@@ -3,8 +3,8 @@
 import socket
 import os
 import sys
-from actions import do as do_action
-from client import get_client
+from command_line_telegram.actions import do as do_action
+from command_line_telegram.client import get_client
 import json
 
 session = sys.argv[1]

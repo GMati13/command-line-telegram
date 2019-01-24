@@ -1,7 +1,7 @@
 import sys
 import socket
 import os
-from client import get_client
+from command_line_telegram.client import get_client
 
 actions = ['start', 'kill']
 
