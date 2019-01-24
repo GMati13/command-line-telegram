@@ -2,6 +2,7 @@ import sys
 import socket
 import os
 from command_line_telegram.client import get_client
+import socket
 
 actions = ['start', 'kill']
 
@@ -37,4 +38,8 @@ def start(args):
 def kill(args):
     session = os.path.join(args.sessions_directory, args.session_name)
     if os.path.exists(session):
-        os.remove(session)
+        client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        client.connect(session)
+        client.send({
+            'action': 'kill'
+        })

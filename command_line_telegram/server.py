@@ -30,6 +30,8 @@ while True:
         break
     else:
         args = eval(data.decode('utf-8'))
+        if args['action'] == 'kill':
+            break
         do_action(client.tg, args, conn)
 server.close()
 os.remove(session)
