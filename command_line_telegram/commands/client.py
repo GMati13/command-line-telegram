@@ -54,7 +54,8 @@ def get_list(args):
         'type': args.type,
         'id': args.id,
         'minimal': args.minimal,
-        'history': args.history
+        'history': args.history,
+        'pinned': args.pinned
     }).encode('utf-8'))
     if args.dialogs:
         dialogs = eval(client.recv(1048576).decode('utf-8'))

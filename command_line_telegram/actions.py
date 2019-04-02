@@ -19,7 +19,7 @@ def send(client, data):
 
 def get_list(client, data, conn):
     if data['dialogs']:
-        dialogs = client.get_dialogs(limit=data['limit']+data['offset'])
+        dialogs = client.get_dialogs(limit=data['limit']+data['offset'], pinned_only=data['pinned'])
         conn.sendall(str({
             'total': dialogs['total_count'],
             'dialogs': list(map(parse_dialog(data), dialogs['dialogs'][data['offset']:]))

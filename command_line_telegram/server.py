@@ -6,13 +6,34 @@ import sys
 from command_line_telegram.actions import do as do_action
 from command_line_telegram.client import get_client
 import json
+from shlex import quote
 
 session = sys.argv[1]
 name = os.path.basename(session)
 dirname = os.path.dirname(session)
 
 client = get_client(name)
-client.tg.start()
+tg = client.tg
+
+favorites = os.path.join(client.clam_workdir, 'favorites')
+
+@tg.on_message()
+def on_message(c, msg):
+    global favorites
+
+    if not os.path.exists(favorites):
+        return
+
+    with open(favorites) as f:
+        fav = list(map(lambda id: id[:-1], f.readlines()))
+        if msg['chat']['type'] == 'private' and str(msg['from_user']['id']) in fav:
+            if msg['text']:
+                os.system('talk ' + quote(msg['text']))
+            else:
+                os.system('talk media')
+        f.close()
+
+tg.start()
 
 if not os.path.exists(dirname):
     os.mkdir(dirname)
@@ -33,5 +54,6 @@ while True:
         if args['action'] == 'kill':
             break
         do_action(client.tg, args, conn)
+tg.stop()
 server.close()
 os.remove(session)
